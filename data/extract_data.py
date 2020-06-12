@@ -6,9 +6,12 @@ import time
 print("Starting")
 start = time.time()
 
+
 def get_tickers():
-    resp = requests.get('http://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
-    table = bs4.BeautifulSoup(resp.text, 'lxml').find('table', {'class': 'wikitable sortable'})
+    resp = requests.get(
+        'http://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
+    table = bs4.BeautifulSoup(resp.text, 'lxml').find(
+        'table', {'class': 'wikitable sortable'})
 
     symbols = []
     for row in table.findAll('tr')[1:]:
@@ -40,7 +43,8 @@ def get_data():
                     'Content-Type': 'application/json',
                     'Authorization': 'Token 31db9807b1b41a9e85229876c01472b6a4f263ed'
                 }
-                desc = requests.get("https://api.tiingo.com/tiingo/daily/{}?".format(symbol.replace('.', '-')), headers=headers)
+                desc = requests.get(
+                    "https://api.tiingo.com/tiingo/daily/{}?".format(symbol.replace('.', '-')), headers=headers)
                 with open('stocks/{}/desc.pkl'.format(symbol), "wb") as f:
                     pickle.dump(desc.json(), f)
                     print(symbol + ' dumping')
@@ -52,7 +56,8 @@ def get_data():
                 'Content-Type': 'application/json',
                 'Authorization': 'Token 31db9807b1b41a9e85229876c01472b6a4f263ed'
             }
-            eod = requests.get("https://api.tiingo.com/tiingo/daily/{}/prices?startDate=2019-01-02".format(symbol.replace('.', '-')), headers=headers)
+            eod = requests.get("https://api.tiingo.com/tiingo/daily/{}/prices?startDate=2019-01-02".format(
+                symbol.replace('.', '-')), headers=headers)
             with open('stocks/{}/{}.pkl'.format(symbol, symbol), "wb") as f:
                 pickle.dump(eod.json(), f)
         except Exception:

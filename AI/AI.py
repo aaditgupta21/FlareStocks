@@ -45,7 +45,7 @@ def make_model(symbol, x, y, val_x, val_y):
         monitor='val_loss', patience=10, baseline=0.1)
     model.compile(optimizer=tf.keras.optimizers.Adam(
         0.1), loss='mean_absolute_error')
-    model.fit(x=x, y=y, validation_data=(val_x, val_y), epochs=100,
+    model.fit(x=x, y=y, validation_data=(val_x, val_y), epochs=200,
               callbacks=[reduce_lr, check, early], verbose=1)
     return model
 

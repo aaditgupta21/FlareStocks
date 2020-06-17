@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>FlareStocks</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"
+        ></script>
+        <link rel="icon" href="../static/img/logo.svg" />
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+            $(document).ready(function () {
+                var companies = "{{ names }}"
+                    .replace(/\[|]|&#39;/g, "")
+                    .split(",");
+                for (i in companies) {
+                    $("#dropdown").append(
+                        '<a class="dropdown-item" href="/company?company=' +
+                            companies[i].trim() +
+                            '">' +
+                            companies[i] +
+                            "</a>"
+                    );
+                }
+            });
+        </script>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const myParam = urlParams.get("myParam");
+
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return "";
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                var name = getParameterByName("company").replace("/", "");
+                $.ajax({
+                    data: {
+                        name: name,
+                    },
+                    type: "POST",
+                    url: "/select",
+                }).done(function (data) {
+                    $("#name").text(data.name);
+                    $("#description").text(data.description);
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                var name = getParameterByName("company").replace("/", "");
+                $.ajax({
+                    data: {
+                        name: name,
+                    },
+                    type: "POST",
+                    url: "/graph",
+                }).done(function (x) {
+                    google.charts.load("current", { packages: ["corechart"] });
+                    google.charts.setOnLoadCallback(drawChart);
+
+                    function drawChart() {
+                        var today = new Date();
+                        var data = google.visualization.arrayToDataTable(x.x);
+
+                        var options = {
+                            title: name + " Graph",
+                            hAxis: {
+                                title: "Data",
+                                titleTextStyle: { color: "#333" },
+                            },
+                            vAxis: { title: "Stock price", minValue: 0 },
+                            animation: {
+                                startup: true,
+                                duration: 800,
+                                easing: "in",
+                            },
+                        };
+
+                        var chart = new google.visualization.AreaChart(
+                            document.getElementById("chart_div")
+                        );
+                        chart.draw(data, options);
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $("form").on("submit", function (event) {
+                    $.ajax({
+                        data: {
+                            name: $("#searchInput").val(),
+                        },
+                        type: "POST",
+                        url: "/search",
+                    }).done(function (data) {
+                        document.location.href =
+                            "/company?company=" + data.name;
+                    });
+                    event.preventDefault();
+                });
+            });
+        </script>
+    </head>
+    <body id="company">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a style="font-size: 40px;" class="navbar-brand" href="/">FlareStocks</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarContent"
+                aria-controls="navbarContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="flex-grow-1 d-flex">
+                <form class="form-inline flex-nowrap bg-light mx-0 mx-lg-auto rounded p-1">
+                    <input style="width: 500px;"class="form-control mr-sm-2" type="search" id="searchInput" placeholder="Search" aria-label="Search"">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Select a Company</a>
+                    <div id="dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown"
+                        style="height:auto;max-height:400px;overflow-x:hidden;">
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="jumbotron">
+            <h1 style="text-align: center;" class="display-4" id="name"></h1>
+            <hr class="my-4" />
+            <p
+                style="margin-right: 500px; margin-left: 500px;"
+                id="description"
+                style="height: auto; max-height: 400px; overflow-x: hidden;"
+            ></p>
+        </div>
+        <div id="graph">
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        </div>
+        <a href="https://github.com/aaditgupta21/FlareStocks">
+            <img style="height: 3em;
+            width: 4em;
+            position: fixed;
+            bottom: 1em;
+            right: 1.5em;
+            background-color: white;
+            border-radius: 9999px;" src="../static/img/gh.svg" id="ghlogo" />
+        </a>
+    </body>
+</html>

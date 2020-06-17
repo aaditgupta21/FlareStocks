@@ -1,76 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    <meta charset="utf-8" />
     <title>FlareStocks</title>
-
-    <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="../static/css/style.css">
-
-    <!-- Font Awesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="icon" href="../static/img/logo.svg" />
+    <script>
+        $(document).ready(function () {
+            var companies = "{{ names }}"
+                .replace(/\[|]|&#39;/g, "")
+                .split(",");
+            for (i in companies) {
+                $("#dropdown").append(
+                    '<a class="dropdown-item" href="/company?company=' +
+                    companies[i].trim() +
+                    '/">' +
+                    companies[i] +
+                    "</a>"
+                );
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("form").on("submit", function (event) {
+                $.ajax({
+                    data: {
+                        name: $("#searchInput").val(),
+                    },
+                    type: "POST",
+                    url: "/search",
+                }).done(function (data) {
+                    document.location.href =
+                        "/company?company=" + data.name;
+                });
+                event.preventDefault();
+            });
+        });
+    </script>
 </head>
 
-<body>
-
-    <div class="wrapper">
-        <!-- Sidebar Holder -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>FlareStocks</h3>
-            </div>
-
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#">Home</a>
-                    
-                </li>
-                <li>
-                    <a style="padding-top: 30px;" href="#">About</a>
-            <ul class="list-unstyled CTAs">
-                <li>
-                    <a href="https://github.com/aaditgupta21/FlareStocks" class="download">Download source</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Page Content Holder -->
-        <div id="content">
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-
-                    <button type="button" id="sidebarCollapse" class="navbar-btn">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-
+<body id="home">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a style="font-size: 40px;" class="navbar-brand" href="/">FlareStocks</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="flex-grow-1 d-flex">
+            <form class="form-inline flex-nowrap bg-light mx-0 mx-lg-auto rounded p-1">
+                <input style="width: 500px;" class="form-control mr-sm-2" type="search" id="searchInput" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Select a Company</a>
+                <div id="dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown"
+                    style="height:auto;max-height:400px;overflow-x:hidden;">
                 </div>
-            </nav>
-            
-           
+            </div>
         </div>
-    </div>
 
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    <script src="../static/js/script.js"></script>
+
+    </nav>
+    <div class="jumbotron">
+        <h1 class="display-4">FlareStocks</h1>
+        <p class="lead">
+            A Stock Predictor AI giving you a projected graph for the next
+            30 days of your favorite company <br>
+            Created by Aadit Gupta
+        </p>
+    </div>
+    <img src="../static/img/logo.svg" alt="Stocks Graph" style="
+                width: 600px;
+                height: 600px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            " />
+    <a href="https://github.com/aaditgupta21/FlareStocks">
+        <img style="height: 3em;
+        width: 4em;
+        position: fixed;
+        bottom: 1em;
+        right: 1.5em;
+        background-color: white;
+        border-radius: 9999px;" src="../static/img/gh.svg" id="ghlogo" />
+    </a>
 </body>
 
 </html>

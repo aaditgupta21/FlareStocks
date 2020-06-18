@@ -54,12 +54,12 @@ if __name__ == "__main__":
 
     start = time.time()
 
-    if not os.path.exists('ai/models'):
-        os.mkdir('ai/models')
+    if not os.path.exists('AI/models'):
+        os.mkdir('AI/models')
     if not os.path.exists('data/stocks'):
-        os.mkdir('data/stock_data')
-    if not os.path.exists('ai/trained'):
-        os.mkdir('ai/trained')
+        os.mkdir('data/stocks')
+    if not os.path.exists('AI/trained'):
+        os.mkdir('AI/trained')
     if not os.path.exists("data/tickers.pkl"):
         print('Run "extract_data.py" first to populate stock data')
         exit()
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         with open("data/tickers.pkl", "rb") as f:
             symbols = pickle.load(f)
     if len(os.listdir('data/stocks')) == 0:
-        print('Run "data.py" first to populate stock data')
+        print('Run "extract_data.py" first to populate stock data')
         exit()
 
     for symbol in symbols:
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         predictions = pred_dates.join(predictions_)
         predictions.drop(columns=['high', 'low', 'open'], inplace=True)
 
-        with open(f'ai/trained/{symbol}.pkl', 'wb') as f:
+        with open(f'AI/trained/{symbol}.pkl', 'wb') as f:
             pickle.dump(predictions.to_dict(orient='records'), f)
 
         print(f'finished {symbol}')

@@ -7,5 +7,5 @@ numpy
 requests
 scikit-learn
 sklearn
-tensorflow
+tensorflow==1.7.0
 Werkzeug

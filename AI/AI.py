@@ -23,8 +23,8 @@ tf.compat.v1.enable_eager_execution()
 
 def load_data(symbol):
     df = pd.DataFrame()
-    if os.path.exists(f'data/stocks/{symbol}/{symbol}.pkl'):
-        df_ = pd.read_pickle(f'data/stocks/{symbol}/{symbol}.pkl')
+    if os.path.exists(f'./data/stocks/{symbol}/{symbol}.pkl'):
+        df_ = pd.read_pickle(f'./data/stocks/{symbol}/{symbol}.pkl')
         df = pd.DataFrame(df_)
         df.set_index('date', inplace=True)
         df.drop(columns=['volume', 'adjClose', 'adjHigh', 'adjLow',
@@ -40,7 +40,7 @@ def make_model(symbol, x, y, val_x, val_y):
     reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
         monitor='val_loss', factor=0.8, patience=0, min_lr=0.00001, mode='min', verbose=1)
     check = tf.keras.callbacks.ModelCheckpoint(
-        f'AI/models/{symbol}.h5', save_best_only=True, verbose=1)
+        f'./AI/models/{symbol}.h5', save_best_only=True, verbose=1)
     early = tf.keras.callbacks.EarlyStopping(
         monitor='val_loss', patience=10, baseline=0.1)
     model.compile(optimizer=tf.keras.optimizers.Adam(
@@ -54,19 +54,19 @@ if __name__ == "__main__":
 
     start = time.time()
 
-    if not os.path.exists('AI/models'):
-        os.mkdir('AI/models')
-    if not os.path.exists('data/stocks'):
-        os.mkdir('data/stocks')
-    if not os.path.exists('AI/trained'):
-        os.mkdir('AI/trained')
-    if not os.path.exists("data/tickers.pkl"):
+    if not os.path.exists('./AI/models'):
+        os.mkdir('./AI/models')
+    if not os.path.exists('./data/stocks'):
+        os.mkdir('./data/stocks')
+    if not os.path.exists('./AI/trained'):
+        os.mkdir('./AI/trained')
+    if not os.path.exists("./data/tickers.pkl"):
         print('Run "extract_data.py" first to populate stock data')
         exit()
     else:
-        with open("data/tickers.pkl", "rb") as f:
+        with open("./data/tickers.pkl", "rb") as f:
             symbols = pickle.load(f)
-    if len(os.listdir('data/stocks')) == 0:
+    if len(os.listdir('./data/stocks')) == 0:
         print('Run "extract_data.py" first to populate stock data')
         exit()
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         predictions = pred_dates.join(predictions_)
         predictions.drop(columns=['high', 'low', 'open'], inplace=True)
 
-        with open(f'AI/trained/{symbol}.pkl', 'wb') as f:
+        with open(f'./AI/trained/{symbol}.pkl', 'wb') as f:
             pickle.dump(predictions.to_dict(orient='records'), f)
 
         print(f'finished {symbol}')

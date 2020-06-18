@@ -12,11 +12,15 @@ google-pasta
 grpcio
 h5py
 idna
+itsdangerous
 Jinja2
 joblib
 Keras-Applications
 Keras-Preprocessing
 kiwisolver
+lxml
+MarkupSafe
+matplotlib
 numpy
 pandas
 protobuf

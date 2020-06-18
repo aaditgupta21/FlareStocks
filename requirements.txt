@@ -9,3 +9,4 @@ scikit-learn
 sklearn
 tensorflow==1.14
 Werkzeug
+gunicorn

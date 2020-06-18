@@ -6,12 +6,18 @@
 git clone https://github.com/aaditgupta21/FlareStocks.git
 pip3 install -r requirements.txt
 python3 app.py
+DISCLAIMER: Needs to be updated everyday to get precise predictions
 ```
 
 ## 👨‍💻 Contact
 Github: [aaditgupta21](https://github.com/aaditgupta21)
 <br>
 Devpost: [Aadit Gupta](https://devpost.com/aaditgupta21)
+
+## Screenshots
+
+![1](./assets/1.png)
+![2](./assets/2.png)
 
 
 ## 🤝 Contributing

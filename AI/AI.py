@@ -40,7 +40,7 @@ def make_model(symbol, x, y, val_x, val_y):
     reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
         monitor='val_loss', factor=0.8, patience=0, min_lr=0.00001, mode='min', verbose=1)
     check = tf.keras.callbacks.ModelCheckpoint(
-        f'ai/models/{symbol}.h5', save_best_only=True, verbose=1)
+        f'AI/models/{symbol}.h5', save_best_only=True, verbose=1)
     early = tf.keras.callbacks.EarlyStopping(
         monitor='val_loss', patience=10, baseline=0.1)
     model.compile(optimizer=tf.keras.optimizers.Adam(

@@ -11,7 +11,7 @@ python3 app.py
 ## 👨‍💻 Contact
 Github: [aaditgupta21](https://github.com/aaditgupta21)
 <br>
-Devpost: [Raadwan masum](https://devpost.com/aaditgupta21)
+Devpost: [Aadit Gupta](https://devpost.com/aaditgupta21)
 
 
 ## 🤝 Contributing

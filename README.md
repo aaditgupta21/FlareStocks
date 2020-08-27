@@ -12,6 +12,7 @@ DISCLAIMER: Needs to be updated everyday to get precise predictions
 ```
 
 ## 👨‍💻 Contact
+
 Github: [aaditgupta21](https://github.com/aaditgupta21)
 <br>
 Devpost: [Aadit Gupta](https://devpost.com/aaditgupta21)
@@ -21,10 +22,9 @@ Devpost: [Aadit Gupta](https://devpost.com/aaditgupta21)
 ![1](./assets/1.png)
 ![2](./assets/2.png)
 
-
 ## 🤝 Contributing
 
-Contributions, PRs, issues and feature requests are welcome! Feel free to check out our [issues page](https://github.com/aaditgupta21/FlareStocks/issues). 
+Contributions, PRs, issues and feature requests are welcome! Feel free to check out our [issues page](https://github.com/aaditgupta21/FlareStocks/issues).
 
 ## ❤️ Show your support
 

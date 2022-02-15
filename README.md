@@ -8,6 +8,7 @@ pip3 install -r requirements.txt
 python3 data/extract_data.py
 python3 AI/AI.py
 python3 app.py
+
 DISCLAIMER: Needs to be updated everyday to get precise predictions
 ```
 
